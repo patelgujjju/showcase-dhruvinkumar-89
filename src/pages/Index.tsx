@@ -28,8 +28,23 @@ const Index = () => {
     });
   }, [sections]);
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = window.innerHeight * 0.1; // 10vh offset
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setIsRadialMenuOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0F172A] to-[#1E293B] text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#0F172A] to-[#1E293B] text-white overflow-x-hidden">
       <ScrollProgressBar />
       
       <div className="relative">
@@ -58,36 +73,39 @@ const Index = () => {
           <button
             onClick={() => setIsRadialMenuOpen(!isRadialMenuOpen)}
             className="w-12 h-12 bg-white/10 rounded-full backdrop-blur-xl border border-white/20 
-                     flex items-center justify-center"
+                     flex items-center justify-center relative z-20"
           >
             <Home className="w-6 h-6" />
           </button>
 
           {/* Radial Menu */}
-          <div className={`absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300
-                          ${isRadialMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}>
-            <div className="relative">
+          <div 
+            className={`absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-300 w-[300px] h-[300px]
+                       ${isRadialMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+          >
+            <div className="relative w-full h-full">
               {sections.slice(1).map(({ id, Icon }, index) => {
                 const angle = (index * (360 / (sections.length - 1))) * (Math.PI / 180);
-                const radius = 80; // Adjust this value to change the circle size
+                const radius = 100; // Adjusted radius
                 const x = Math.cos(angle) * radius;
                 const y = Math.sin(angle) * radius;
 
                 return (
-                  <a
+                  <button
                     key={id}
-                    href={`#${id}`}
+                    onClick={() => scrollToSection(id)}
                     className={`absolute w-10 h-10 rounded-full backdrop-blur-xl border border-white/20
                               flex items-center justify-center transition-all duration-300
                               ${activeSection === id ? 'bg-white/20 text-white' : 'bg-white/10 text-white/60'}
                               hover:scale-110 hover:bg-white/30`}
                     style={{
                       transform: `translate(${x}px, ${y}px)`,
+                      left: '50%',
+                      bottom: '50%',
                     }}
-                    onClick={() => setIsRadialMenuOpen(false)}
                   >
                     <Icon className="w-5 h-5" />
-                  </a>
+                  </button>
                 );
               })}
             </div>
@@ -97,16 +115,16 @@ const Index = () => {
         {/* Desktop Navigation */}
         <nav className="fixed right-4 top-1/2 -translate-y-1/2 space-y-4 hidden md:block">
           {sections.map(({ id, Icon }) => (
-            <a
+            <button
               key={id}
-              href={`#${id}`}
+              onClick={() => scrollToSection(id)}
               className={`block p-2 rounded-full transition-all duration-300
                         ${activeSection === id 
                           ? 'bg-white/20 text-white scale-110' 
                           : 'bg-white/10 text-white/60 hover:scale-110 hover:bg-white/15'}`}
             >
               <Icon className="w-5 h-5" />
-            </a>
+            </button>
           ))}
         </nav>
       </div>

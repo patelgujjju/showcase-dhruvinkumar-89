@@ -35,28 +35,32 @@ const Index = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Generate random floating dots
-  const floatingDots = Array.from({ length: 20 }).map((_, i) => (
+  // Generate floating dots with different sizes and speeds
+  const floatingDots = Array.from({ length: 30 }).map((_, i) => (
     <div
       key={i}
       className="floating-dots"
       style={{
         left: `${Math.random() * 100}%`,
-        animationDelay: `${Math.random() * 10}s`,
+        width: `${Math.random() * 3 + 1}px`,
+        height: `${Math.random() * 3 + 1}px`,
+        animationDuration: `${Math.random() * 15 + 10}s`,
+        animationDelay: `${Math.random() * 5}s`,
         opacity: 0
       }}
     />
   ));
 
-  // Parallax text elements
-  const parallaxTexts = ['CREATIVE', 'INNOVATIVE', 'DYNAMIC'].map((text, i) => (
+  // Parallax text elements with different positions and speeds
+  const parallaxTexts = ['CREATIVE', 'INNOVATIVE', 'DYNAMIC', 'PASSIONATE', 'SKILLED'].map((text, i) => (
     <div
       key={text}
       className="parallax-text"
       style={{
-        right: `${i * 30}%`,
+        right: `${i * 25}%`,
         top: '50%',
         transform: 'translateY(-50%)',
+        animationDelay: `${i * 0.2}s`
       }}
     >
       {text}
@@ -90,7 +94,6 @@ const Index = () => {
           ))}
         </div>
 
-        {/* Mobile Navigation Menu */}
         <nav className="mobile-menu">
           <div className="flex gap-4">
             {sections.map(({ id, Icon }) => (

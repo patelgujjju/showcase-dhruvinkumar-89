@@ -13,12 +13,12 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
 
   const sections = [
-    { id: "home", Icon: Home, ref: useInView({ threshold: 0.5 }) },
-    { id: "education", Icon: GraduationCap, ref: useInView({ threshold: 0.5 }) },
-    { id: "experience", Icon: Briefcase, ref: useInView({ threshold: 0.5 }) },
-    { id: "projects", Icon: Code, ref: useInView({ threshold: 0.5 }) },
-    { id: "skills", Icon: Wrench, ref: useInView({ threshold: 0.5 }) },
-    { id: "contact", Icon: Mail, ref: useInView({ threshold: 0.5 }) }
+    { id: "home", Icon: Home, ref: useInView({ threshold: 0.2, triggerOnce: false }) },
+    { id: "education", Icon: GraduationCap, ref: useInView({ threshold: 0.2, triggerOnce: false }) },
+    { id: "experience", Icon: Briefcase, ref: useInView({ threshold: 0.2, triggerOnce: false }) },
+    { id: "projects", Icon: Code, ref: useInView({ threshold: 0.2, triggerOnce: false }) },
+    { id: "skills", Icon: Wrench, ref: useInView({ threshold: 0.2, triggerOnce: false }) },
+    { id: "contact", Icon: Mail, ref: useInView({ threshold: 0.2, triggerOnce: false }) }
   ];
 
   useEffect(() => {

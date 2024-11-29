@@ -6,18 +6,20 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased overflow-x-hidden;
   }
 }
 
 @layer components {
   .section-title {
-    @apply text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-blue-300;
+    @apply text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text 
+           bg-gradient-to-r from-emerald-300 to-blue-300 relative;
   }
   
   .glass-card {
-    @apply backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10
-           transform transition-all duration-500 hover:scale-[1.02];
+    @apply backdrop-blur-xl bg-white/5 rounded-3xl p-4 md:p-6 border border-white/10
+           transform transition-all duration-500 hover:scale-[1.02] relative
+           hover:shadow-[0_0_30px_rgba(255,255,255,0.1)];
   }
 
   .glass-card::before {
@@ -30,15 +32,86 @@
   }
   
   .hover-item {
-    @apply px-4 py-2 rounded-full bg-white/5 border border-white/10
+    @apply px-3 md:px-4 py-2 rounded-full bg-white/5 border border-white/10
            transform transition-all duration-300 hover:scale-[1.05] hover:bg-white/10
-           cursor-pointer;
+           cursor-pointer text-sm md:text-base;
+  }
+
+  .parallax-text {
+    @apply absolute pointer-events-none select-none opacity-20 blur-sm
+           text-8xl md:text-9xl font-bold text-white/10;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .floating-dots {
+    @apply absolute w-2 h-2 rounded-full bg-white/20;
+    animation: float 20s infinite linear;
+  }
+
+  .glow-effect {
+    @apply relative overflow-hidden;
+  }
+
+  .glow-effect::after {
+    @apply content-[''] absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500;
+    background: radial-gradient(circle at var(--x) var(--y), 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0) 50%);
+  }
+
+  .glow-effect:hover::after {
+    @apply opacity-100;
+  }
+
+  .text-gradient-animate {
+    @apply bg-clip-text text-transparent bg-gradient-to-r;
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
   }
 }
 
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-1000px) translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .grid-background {
-  background-size: 100px 100px;
+  background-size: 50px 50px;
   background-image: 
-    linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+}
+
+.mobile-menu {
+  @apply fixed bottom-4 left-1/2 -translate-x-1/2 backdrop-blur-xl bg-white/10 
+         rounded-full border border-white/20 p-2 z-50 md:hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-1;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20;
 }

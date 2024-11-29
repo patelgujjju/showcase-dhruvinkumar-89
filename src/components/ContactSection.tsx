@@ -1,41 +1,33 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, Github, Linkedin, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import emailjs from '@emailjs/browser';
 
 export const ContactSection = () => {
   const { toast } = useToast();
-  const form = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const name = formData.get('user_name');
+    const email = formData.get('user_email');
+    const message = formData.get('message');
     
-    try {
-      await emailjs.sendForm(
-        'service_2aqzwzg', // Replace with your EmailJS service ID
-        'template_8jxqw3j', // Replace with your EmailJS template ID
-        form.current!,
-        'user_your_public_key' // Replace with your EmailJS public key
-      );
-
-      toast({
-        title: "Message sent!",
-        description: "Thanks for reaching out. I'll get back to you soon!",
-      });
-      
-      if (form.current) {
-        form.current.reset();
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again later.",
-        variant: "destructive",
-      });
-    }
+    // Format the message for WhatsApp
+    const whatsappMessage = `Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`;
+    const whatsappUrl = `https://wa.me/919537428629?text=${whatsappMessage}`;
+    
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, '_blank');
+    
+    toast({
+      title: "Redirecting to WhatsApp",
+      description: "You'll be redirected to send your message via WhatsApp.",
+    });
+    
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
@@ -48,7 +40,7 @@ export const ContactSection = () => {
         
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-8">
-            <form ref={form} onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Input 
                   name="user_name"

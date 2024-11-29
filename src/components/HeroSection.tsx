@@ -32,8 +32,9 @@ export const HeroSection = ({ inView }: { inView: boolean }) => {
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
-      <div className="absolute top-4 right-4 font-mono text-lg text-transparent bg-clip-text 
-                    bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse shadow-neon">
+      <div className="absolute top-4 right-4 font-mono text-lg backdrop-blur-sm bg-white/5 px-4 py-2 rounded-full
+                    border border-white/10 hover:bg-white/10 transition-all duration-300
+                    text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
         {currentTime.toLocaleTimeString()}
       </div>
       

@@ -6,83 +6,42 @@ import { ExperienceSection } from "@/components/ExperienceSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { SkillsSection } from "@/components/SkillsSection";
 import { ContactSection } from "@/components/ContactSection";
+import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { Home, GraduationCap, Briefcase, Code, Wrench, Mail } from "lucide-react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
-  const [mousePosition, setMousePosition] = useState({ x: "50%", y: "50%" });
+  const [isRadialMenuOpen, setIsRadialMenuOpen] = useState(false);
 
   const sections = [
-    { id: "home", Icon: Home, ref: useInView({ threshold: 0.1 }) },
-    { id: "education", Icon: GraduationCap, ref: useInView({ threshold: 0.1 }) },
-    { id: "experience", Icon: Briefcase, ref: useInView({ threshold: 0.1 }) },
-    { id: "projects", Icon: Code, ref: useInView({ threshold: 0.1 }) },
-    { id: "skills", Icon: Wrench, ref: useInView({ threshold: 0.1 }) },
-    { id: "contact", Icon: Mail, ref: useInView({ threshold: 0.1 }) }
+    { id: "home", Icon: Home, ref: useInView({ threshold: 0.5 }) },
+    { id: "education", Icon: GraduationCap, ref: useInView({ threshold: 0.5 }) },
+    { id: "experience", Icon: Briefcase, ref: useInView({ threshold: 0.5 }) },
+    { id: "projects", Icon: Code, ref: useInView({ threshold: 0.5 }) },
+    { id: "skills", Icon: Wrench, ref: useInView({ threshold: 0.5 }) },
+    { id: "contact", Icon: Mail, ref: useInView({ threshold: 0.5 }) }
   ];
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      setMousePosition({ x: `${x}%`, y: `${y}%` });
-      
-      document.documentElement.style.setProperty('--x', `${x}%`);
-      document.documentElement.style.setProperty('--y', `${y}%`);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  // Generate floating dots with different sizes and speeds
-  const floatingDots = Array.from({ length: 30 }).map((_, i) => (
-    <div
-      key={i}
-      className="floating-dots"
-      style={{
-        left: `${Math.random() * 100}%`,
-        width: `${Math.random() * 3 + 1}px`,
-        height: `${Math.random() * 3 + 1}px`,
-        animationDuration: `${Math.random() * 15 + 10}s`,
-        animationDelay: `${Math.random() * 5}s`,
-        opacity: 0
-      }}
-    />
-  ));
-
-  // Parallax text elements with different positions and speeds
-  const parallaxTexts = ['CREATIVE', 'INNOVATIVE', 'DYNAMIC', 'PASSIONATE', 'SKILLED'].map((text, i) => (
-    <div
-      key={text}
-      className="parallax-text"
-      style={{
-        right: `${i * 25}%`,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        animationDelay: `${i * 0.2}s`
-      }}
-    >
-      {text}
-    </div>
-  ));
+    sections.forEach(({ id, ref: [_, inView] }) => {
+      if (inView) setActiveSection(id);
+    });
+  }, [sections]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0F172A] to-[#1E293B] text-white">
+      <ScrollProgressBar />
+      
       <div className="relative">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-        {floatingDots}
-        {parallaxTexts}
         
         <div className="relative">
-          {sections.map(({ id, ref: [sectionRef, inView] }, index) => (
+          {sections.map(({ id, ref: [sectionRef, inView] }) => (
             <div
               key={id}
               ref={sectionRef}
               id={id}
-              className={`transform transition-all duration-1000 ${
-                inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
+              className="transform transition-all duration-1000"
             >
               {id === "home" && <HeroSection inView={inView} />}
               {id === "education" && <EducationSection inView={inView} />}
@@ -94,23 +53,61 @@ const Index = () => {
           ))}
         </div>
 
-        <nav className="mobile-menu">
-          <div className="flex gap-4">
-            {sections.map(({ id, Icon }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                className={`p-2 rounded-full transition-colors ${
-                  activeSection === id
-                    ? 'bg-white/20 text-white'
-                    : 'text-white/60 hover:text-white'
-                }`}
-                onClick={() => setActiveSection(id)}
-              >
-                <Icon className="w-5 h-5" />
-              </a>
-            ))}
+        {/* Mobile Navigation */}
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
+          <button
+            onClick={() => setIsRadialMenuOpen(!isRadialMenuOpen)}
+            className="w-12 h-12 bg-white/10 rounded-full backdrop-blur-xl border border-white/20 
+                     flex items-center justify-center"
+          >
+            <Home className="w-6 h-6" />
+          </button>
+
+          {/* Radial Menu */}
+          <div className={`absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300
+                          ${isRadialMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}>
+            <div className="relative">
+              {sections.slice(1).map(({ id, Icon }, index) => {
+                const angle = (index * (360 / (sections.length - 1))) * (Math.PI / 180);
+                const radius = 80; // Adjust this value to change the circle size
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+
+                return (
+                  <a
+                    key={id}
+                    href={`#${id}`}
+                    className={`absolute w-10 h-10 rounded-full backdrop-blur-xl border border-white/20
+                              flex items-center justify-center transition-all duration-300
+                              ${activeSection === id ? 'bg-white/20 text-white' : 'bg-white/10 text-white/60'}
+                              hover:scale-110 hover:bg-white/30`}
+                    style={{
+                      transform: `translate(${x}px, ${y}px)`,
+                    }}
+                    onClick={() => setIsRadialMenuOpen(false)}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
+        </div>
+
+        {/* Desktop Navigation */}
+        <nav className="fixed right-4 top-1/2 -translate-y-1/2 space-y-4 hidden md:block">
+          {sections.map(({ id, Icon }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={`block p-2 rounded-full transition-all duration-300
+                        ${activeSection === id 
+                          ? 'bg-white/20 text-white scale-110' 
+                          : 'bg-white/10 text-white/60 hover:scale-110 hover:bg-white/15'}`}
+            >
+              <Icon className="w-5 h-5" />
+            </a>
+          ))}
         </nav>
       </div>
     </div>

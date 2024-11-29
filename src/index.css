@@ -17,17 +17,24 @@
   }
   
   .glass-card {
-    @apply backdrop-blur-xl bg-white/5 rounded-3xl p-4 md:p-6 border border-white/10
-           transform transition-all duration-500 hover:scale-[1.02] relative
-           hover:shadow-[0_0_30px_rgba(255,255,255,0.1)];
+    @apply backdrop-blur-xl bg-white/5 rounded-3xl p-4 md:p-6 
+           border border-white/10 transform transition-all duration-500 
+           hover:scale-[1.02] relative hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]
+           before:absolute before:inset-0 before:rounded-3xl 
+           before:bg-gradient-to-r before:from-white/10 before:to-transparent 
+           before:opacity-0 before:transition-opacity before:duration-500
+           hover:before:opacity-100;
   }
 
-  .glass-card::before {
-    @apply content-[''] absolute -inset-0.5 bg-gradient-to-r from-emerald-300/30 to-blue-300/30
-           rounded-3xl blur opacity-0 transition duration-1000;
+  .glass-card::after {
+    @apply content-[''] absolute inset-0 rounded-3xl opacity-0;
+    background: radial-gradient(circle at var(--x) var(--y), 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0) 50%);
+    transition: opacity 0.5s;
   }
 
-  .glass-card:hover::before {
+  .glass-card:hover::after {
     @apply opacity-100;
   }
   
@@ -63,18 +70,6 @@
   .glow-effect:hover::after {
     @apply opacity-100;
   }
-
-  .text-gradient-animate {
-    @apply bg-clip-text text-transparent bg-gradient-to-r;
-    background-size: 200% 200%;
-    animation: gradient 8s ease infinite;
-  }
-
-  .shadow-neon {
-    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
-                 0 0 20px rgba(168, 85, 247, 0.3),
-                 0 0 30px rgba(168, 85, 247, 0.2);
-  }
 }
 
 @keyframes float {
@@ -91,12 +86,6 @@
   }
 }
 
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 .grid-background {
   background-size: 50px 50px;
   background-image: 
@@ -104,12 +93,6 @@
     linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
 }
 
-.mobile-menu {
-  @apply fixed bottom-4 left-1/2 -translate-x-1/2 backdrop-blur-xl bg-white/10 
-         rounded-full border border-white/20 p-2 z-50 md:hidden;
-}
-
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   @apply w-1;
 }

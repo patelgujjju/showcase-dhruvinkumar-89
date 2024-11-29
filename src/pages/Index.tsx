@@ -11,7 +11,6 @@ import { Home, GraduationCap, Briefcase, Code, Wrench, Mail } from "lucide-react
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
-  const [isRadialMenuOpen, setIsRadialMenuOpen] = useState(false);
 
   const sections = [
     { id: "home", Icon: Home, ref: useInView({ threshold: 0.5 }) },
@@ -31,7 +30,7 @@ const Index = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = window.innerHeight * 0.1; // 10vh offset
+      const offset = window.innerHeight * 0.1;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -40,7 +39,6 @@ const Index = () => {
         behavior: "smooth"
       });
     }
-    setIsRadialMenuOpen(false);
   };
 
   return (
@@ -70,45 +68,18 @@ const Index = () => {
 
         {/* Mobile Navigation */}
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
-          <button
-            onClick={() => setIsRadialMenuOpen(!isRadialMenuOpen)}
-            className="w-12 h-12 bg-white/10 rounded-full backdrop-blur-xl border border-white/20 
-                     flex items-center justify-center relative z-20"
-          >
-            <Home className="w-6 h-6" />
-          </button>
-
-          {/* Radial Menu */}
-          <div 
-            className={`absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-300 w-[300px] h-[300px]
-                       ${isRadialMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
-          >
-            <div className="relative w-full h-full">
-              {sections.slice(1).map(({ id, Icon }, index) => {
-                const angle = (index * (360 / (sections.length - 1))) * (Math.PI / 180);
-                const radius = 100;
-                const x = Math.cos(angle) * radius;
-                const y = Math.sin(angle) * radius;
-
-                return (
-                  <button
-                    key={id}
-                    onClick={() => scrollToSection(id)}
-                    className={`absolute w-10 h-10 rounded-full backdrop-blur-xl border border-white/20
-                              flex items-center justify-center transition-all duration-300
-                              ${activeSection === id ? 'bg-white/20 text-white' : 'bg-white/10 text-white/60'}
-                              hover:scale-110 hover:bg-white/30`}
-                    style={{
-                      transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%))`,
-                      left: '50%',
-                      bottom: '50%',
-                    }}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </button>
-                );
-              })}
-            </div>
+          <div className="flex gap-3 backdrop-blur-xl bg-white/10 rounded-full border border-white/20 p-2">
+            {sections.map(({ id, Icon }) => (
+              <button
+                key={id}
+                onClick={() => scrollToSection(id)}
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
+                          ${activeSection === id ? 'bg-white/20 text-white' : 'text-white/60'}
+                          hover:bg-white/30`}
+              >
+                <Icon className="w-5 h-5" />
+              </button>
+            ))}
           </div>
         </div>
 

@@ -10,9 +10,9 @@ export const HeroSection = ({ inView }: { inView: boolean }) => (
                     transform transition-all duration-1000 hover:scale-[1.02] w-full max-w-4xl
                     ${inView ? 'animate-fade-in' : 'opacity-0'}`}>
       <div className="flex flex-col items-center gap-6">
-        <Avatar className="w-32 h-32 border-4 border-white/10">
+        <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-white/10 ring-4 ring-purple-300/20">
           <AvatarImage
-            src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
+            src="/lovable-uploads/b6bf3a56-d273-45b7-9f5c-4368b32978f0.png"
             alt="Dhruvinkumar Patel"
             className="object-cover"
           />
@@ -22,9 +22,9 @@ export const HeroSection = ({ inView }: { inView: boolean }) => (
           <Sparkles className="absolute -top-8 -left-8 w-6 h-6 text-yellow-300/70 animate-pulse" />
           <Star className="absolute -top-4 -right-8 w-6 h-6 text-purple-300/70 animate-bounce" />
           <Heart className="absolute -bottom-4 -right-8 w-6 h-6 text-pink-300/70 animate-pulse" />
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold bg-clip-text text-transparent 
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold bg-clip-text text-transparent 
                        bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300
-                       animate-text-gradient break-words px-2">
+                       animate-text-gradient break-words px-4 md:px-8">
             Dhruvinkumar Patel
           </h1>
         </div>

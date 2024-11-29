@@ -86,7 +86,7 @@ const Index = () => {
             <div className="relative w-full h-full">
               {sections.slice(1).map(({ id, Icon }, index) => {
                 const angle = (index * (360 / (sections.length - 1))) * (Math.PI / 180);
-                const radius = 100; // Adjusted radius
+                const radius = 100;
                 const x = Math.cos(angle) * radius;
                 const y = Math.sin(angle) * radius;
 
@@ -99,7 +99,7 @@ const Index = () => {
                               ${activeSection === id ? 'bg-white/20 text-white' : 'bg-white/10 text-white/60'}
                               hover:scale-110 hover:bg-white/30`}
                     style={{
-                      transform: `translate(${x}px, ${y}px)`,
+                      transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%))`,
                       left: '50%',
                       bottom: '50%',
                     }}

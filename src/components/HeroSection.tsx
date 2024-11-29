@@ -4,6 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TypeAnimation } from 'react-type-animation';
+import { Tilt } from 'react-tilt';
+
+const defaultTiltOptions = {
+  reverse: false,
+  max: 35,
+  perspective: 1000,
+  scale: 1.1,
+  speed: 1000,
+  transition: true,
+  axis: null,
+  reset: true,
+  easing: "cubic-bezier(.03,.98,.52,.99)",
+};
 
 export const HeroSection = ({ inView }: { inView: boolean }) => {
   const [isSpinning, setIsSpinning] = useState(true);
@@ -20,7 +33,7 @@ export const HeroSection = ({ inView }: { inView: boolean }) => {
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
       <div className="absolute top-4 right-4 font-mono text-lg text-transparent bg-clip-text 
-                    bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse">
+                    bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse shadow-neon">
         {currentTime.toLocaleTimeString()}
       </div>
       
@@ -32,21 +45,25 @@ export const HeroSection = ({ inView }: { inView: boolean }) => {
         <div className="flex flex-col items-center gap-6">
           <Dialog>
             <DialogTrigger asChild>
-              <div 
-                className={`relative cursor-pointer transform transition-all duration-300
-                          ${isSpinning ? 'animate-[spin_3s_linear_infinite]' : ''}`}
-                onMouseEnter={() => setIsSpinning(false)}
-                onMouseLeave={() => setIsSpinning(true)}
-              >
-                <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-white/10 ring-4 ring-purple-300/20
-                               hover:scale-105">
-                  <AvatarImage
-                    src="/lovable-uploads/b6bf3a56-d273-45b7-9f5c-4368b32978f0.png"
-                    alt="Dhruvinkumar Patel"
-                    className="object-cover"
-                  />
-                  <AvatarFallback>DP</AvatarFallback>
-                </Avatar>
+              <div className="cursor-pointer">
+                <Tilt options={defaultTiltOptions}>
+                  <div 
+                    className={`relative transform transition-all duration-300
+                              ${isSpinning ? 'animate-[spin_3s_linear_infinite]' : ''}`}
+                    onMouseEnter={() => setIsSpinning(false)}
+                    onMouseLeave={() => setIsSpinning(true)}
+                  >
+                    <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-white/10 ring-4 ring-purple-300/20
+                                   hover:scale-105 shadow-xl">
+                      <AvatarImage
+                        src="/lovable-uploads/b6bf3a56-d273-45b7-9f5c-4368b32978f0.png"
+                        alt="Dhruvinkumar Patel"
+                        className="object-cover"
+                      />
+                      <AvatarFallback>DP</AvatarFallback>
+                    </Avatar>
+                  </div>
+                </Tilt>
               </div>
             </DialogTrigger>
             <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 border-none bg-transparent">

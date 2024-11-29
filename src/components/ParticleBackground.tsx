@@ -19,7 +19,7 @@ const ParticleBackground = () => {
         },
         particles: {
           number: {
-            value: 50,
+            value: 80,
             density: {
               enable: true,
               value_area: 800,
@@ -32,8 +32,8 @@ const ParticleBackground = () => {
             type: "circle",
           },
           opacity: {
-            value: 0.2,
-            random: true,
+            value: 0.5,
+            random: false,
           },
           size: {
             value: 3,
@@ -41,39 +41,51 @@ const ParticleBackground = () => {
           },
           move: {
             enable: true,
-            speed: 1,
+            speed: 2,
             direction: "none",
-            random: true,
+            random: false,
             straight: false,
-            out_mode: "out",
-            bounce: false,
+            outModes: {
+              default: "bounce",
+            },
+            attract: {
+              enable: false,
+              rotateX: 600,
+              rotateY: 1200,
+            },
           },
           links: {
             enable: true,
             distance: 150,
             color: "#ffffff",
-            opacity: 0.1,
+            opacity: 0.4,
             width: 1,
           },
-          interactivity: {
-            detect_on: "window",
-            events: {
-              onhover: {
-                enable: true,
-                mode: "grab",
-              },
-              resize: true,
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onHover: {
+              enable: true,
+              mode: "repulse",
             },
-            modes: {
-              grab: {
-                distance: 140,
-                links: {
-                  opacity: 0.3,
-                },
-              },
+            onClick: {
+              enable: true,
+              mode: "push",
+            },
+            resize: true,
+          },
+          modes: {
+            repulse: {
+              distance: 100,
+              duration: 0.4,
+            },
+            push: {
+              particles_nb: 4,
             },
           },
         },
+        retina_detect: true,
       }}
     />
   );

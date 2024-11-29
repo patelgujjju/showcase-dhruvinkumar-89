@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, Github, Linkedin, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import emailjs from '@emailjs/browser';
 
 export const ContactSection = () => {
   const { toast } = useToast();
+  const form = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast({
-      title: "Message sent!",
-      description: "Thanks for reaching out. I'll get back to you soon!",
-    });
-    (e.target as HTMLFormElement).reset();
+    
+    try {
+      await emailjs.sendForm(
+        'service_2aqzwzg', // Replace with your EmailJS service ID
+        'template_8jxqw3j', // Replace with your EmailJS template ID
+        form.current!,
+        'user_your_public_key' // Replace with your EmailJS public key
+      );
+
+      toast({
+        title: "Message sent!",
+        description: "Thanks for reaching out. I'll get back to you soon!",
+      });
+      
+      if (form.current) {
+        form.current.reset();
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -27,9 +48,10 @@ export const ContactSection = () => {
         
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form ref={form} onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Input 
+                  name="user_name"
                   placeholder="Your Name" 
                   required 
                   className="bg-white/5 border-white/10 focus:border-white/20"
@@ -37,6 +59,7 @@ export const ContactSection = () => {
               </div>
               <div>
                 <Input 
+                  name="user_email"
                   type="email" 
                   placeholder="Your Email" 
                   required 
@@ -45,6 +68,7 @@ export const ContactSection = () => {
               </div>
               <div>
                 <Textarea 
+                  name="message"
                   placeholder="Your Message" 
                   required 
                   className="bg-white/5 border-white/10 focus:border-white/20 min-h-[150px]"
